@@ -6,7 +6,7 @@ const subsKey = "d4f43f902b4049218451d78eb5966156";
 const axios = require("axios");
 
 app.listen(8000, () => {
-  console.log('App running on PORT 3000')
+  console.log('App running on PORT 3000 a')
 });
 
 const data = {
