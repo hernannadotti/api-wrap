@@ -27,7 +27,7 @@ const headers = {
 }
 
 
-router.get("/credenciales", (req, res) => {
+router.get("/credenciales", cors(), (req, res) => {
   axios.post(`${baseUrl}/credenciales/v2`, body , {
     headers: headers
   })
