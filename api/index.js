@@ -10,9 +10,14 @@ app.listen(8000, () => {
   console.log('App running on PORT 3000')
 });
 
+const body = {
+  'username': 'GASLUTST',
+  'password': 'gaslu2024',
+  'grant_type': 'password',
+  'client_id': 'api-clientes-login',
+}
+
 app.use(cors())
-
-
 
 
 const headers = {
@@ -23,7 +28,7 @@ const headers = {
 
 
 router.get("/credenciales", (req, res) => {
-  axios.post(`${baseUrl}/credenciales/v2`, {}, {
+  axios.post(`${baseUrl}/credenciales/v2`, body , {
     headers: headers
   })
     .then(response => {
