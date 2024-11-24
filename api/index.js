@@ -9,12 +9,7 @@ app.listen(8000, () => {
   console.log('App running on PORT 3000')
 });
 
-const data = {
-  'username': 'GASLUTST',
-  'password': 'gaslu2024',
-  'grant_type': 'password',
-  'client_id': 'api-clientes-login',
-}
+
 
 
 const headers = {
@@ -26,7 +21,7 @@ const headers = {
 
 router.get("/credenciales", async (req, res) => {
   try {
-    const response = await axios.post(baseUrl + "/credenciales/v2/", data, { headers });
+    const response = await axios.post(baseUrl + "/credenciales/v2/", {}, { headers });
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: "An error occurred" });
