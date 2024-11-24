@@ -22,13 +22,16 @@ const headers = {
 }
 
 
-router.get("/credenciales", async (req, res) => {
-  try {
-    const response = await axios.post(baseUrl + "/credenciales/v2/", {}, { headers });
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ error: "An error occurred" });
-  }
+router.get("/credenciales", (req, res) => {
+  axios.post(`${baseUrl}/credenciales/v2`, {}, {
+    headers: headers
+  })
+    .then(response => {
+      res.send(response.data);
+    })
+    .catch(error => {
+      res.send(error);
+    })
 });
 
 app.use(router);
