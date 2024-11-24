@@ -22,13 +22,12 @@ app.use(cors())
 
 const headers = {
   'Ocp-Apim-Subscription-Key': subsKey,
-  'Access-Control-Allow-Origin': '*',
   'Content-Type': 'application/x-www-form-urlencoded'
 }
 
 
-router.get("/credenciales", cors(), (req, res) => {
-  axios.post(`${baseUrl}/credenciales/v2`, body , {
+router.get("/credenciales", (req, res) => {
+  axios.post(`${baseUrl}/credenciales/v2`, body, {
     headers: headers
   })
     .then(response => {
