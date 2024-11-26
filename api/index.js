@@ -33,7 +33,7 @@ const headers = {
 
 
 router.get("/credenciales", (req, res) => {
-  axios.fetch(`${baseUrl}/credenciales/v2`, body, {
+  axios.post(`${baseUrl}/credenciales/v2`, body, {
     headers: headers
   })
     .then(response => {
