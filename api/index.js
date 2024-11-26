@@ -32,7 +32,7 @@ const headers = {
 }
 
 
-router.post("/credenciales", (req, res) => {
+router.get("/credenciales", (req, res) => {
   axios.post(`${baseUrl}/credenciales/v2`, body, {
     headers: headers
   })
