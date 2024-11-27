@@ -53,7 +53,7 @@ router.get("/credenciales", (req, res) => {
 });
 
 // Get Localidades
-router.get('/localidades', (req, res) => {
+router.get('/localidades/:q', (req, res) => {
   console.log(res.params)
   axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, {
     headers: headersGet
