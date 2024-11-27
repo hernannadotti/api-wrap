@@ -31,6 +31,11 @@ const headers = {
   'Content-Type': 'application/x-www-form-urlencoded'
 }
 
+const headerGet = {
+  'Ocp-Apim-Subscription-Key': subsKey,
+  'Content-Type': 'application/json'
+}
+
 // get Token
 router.get("/credenciales", (req, res) => {
   axios.post(`${baseUrl}/credenciales/v2`, body, {
@@ -47,7 +52,7 @@ router.get("/credenciales", (req, res) => {
 // Get Localidades
 router.get('/localidades', (req, res) => {
   axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.loc}`, {
-    headers: headers
+    headers: headerGet
   })
     .then(response => {
       res.send(response.data);
