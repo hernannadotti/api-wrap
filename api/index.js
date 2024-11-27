@@ -31,9 +31,22 @@ const headers = {
   'Content-Type': 'application/x-www-form-urlencoded'
 }
 
-
+// get Token
 router.get("/credenciales", (req, res) => {
   axios.post(`${baseUrl}/credenciales/v2`, body, {
+    headers: headers
+  })
+    .then(response => {
+      res.send(response.data);
+    })
+    .catch(error => {
+      res.send(error);
+    })
+});
+
+// Get Localidades
+router.get('/localidades/:loc', (req, res) => {
+  axios.get(`${baseUrl}/localidades/v2/${req.params.loc}`, {
     headers: headers
   })
     .then(response => {
