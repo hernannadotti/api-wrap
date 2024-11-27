@@ -16,8 +16,7 @@ const body = {
   'grant_type': 'password',
   'client_id': 'api-clientes-login',
 }
-
-let authToken;
+  
 
 const corsOptions = {
   origin: '*',
@@ -34,8 +33,7 @@ const headers = {
 }
 
 const headersGet = {
-  'Ocp-Apim-Subscription-Key': subsKey,
-  'Authorization': `Bearer ${authToken}`
+  'Ocp-Apim-Subscription-Key': subsKey
 }
 
 // get Token
