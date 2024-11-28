@@ -5,6 +5,7 @@ var baseUrl = "https://apidev.mercantilandina.com.ar";
 const subsKey = "d4f43f902b4049218451d78eb5966156";
 const axios = require("axios");
 const cors = require('cors');
+const bearerToken = require('express-bearer-token');
 
 app.listen(8000, () => {
   console.log('App running on PORT 3000')
@@ -24,7 +25,8 @@ const corsOptions = {
   methods: 'GET, POST, PUT, DELETE, OPTIONS',
 }
 
-app.use(cors())
+app.use(cors());
+app.use(bearerToken());
 
 const authToken = '';
 const headers = {
@@ -42,6 +44,13 @@ router.get("/credenciales", (req, res) => {
     headers: headers
   })
     .then(response => {
+      bearerToken({
+        bodyKey: `${response.data.access_token}`,
+        queryKey: `${response.data.access_token}`,
+        headerKey: 'Bearer',
+        reqKey: 'token',
+        cookie: false, // by default is disabled
+      })
       res.send(response.data);
     })
     .catch(error => {
