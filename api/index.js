@@ -42,7 +42,6 @@ router.get("/credenciales", (req, res) => {
     headers: headers
   })
     .then(response => {
-      authToken = response.data.access_token;
       res.send(response.data);
     })
     .catch(error => {
