@@ -61,12 +61,7 @@ router.get("/credenciales", (req, res) => {
 // Get Localidades
 router.get('/localidades', (req, res) => {
   console.log(res.params)
-  axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, {
-    headers: {
-      'Authorization': `Bearer ${authToken}`,
-      'Ocp-Apim-Subscription-Key': subsKey
-    }
-  })
+  axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`)
     .then(response => {
       res.send(response.data);
     })
