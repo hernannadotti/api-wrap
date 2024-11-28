@@ -43,7 +43,6 @@ router.get("/credenciales", (req, res) => {
   })
     .then(response => {
       authToken = response.data.access_token;
-      sessionStorage.setItem('authToken', authToken);
       res.send(response.data);
     })
     .catch(error => {
@@ -55,10 +54,7 @@ router.get("/credenciales", (req, res) => {
 router.get('/localidades', (req, res) => {
   console.log(res.params)
   axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, {
-    headers: {
-      'Ocp-Apim-Subscription-Key': subsKey,
-
-    }
+    headers: headersGet
   })
     .then(response => {
       res.send(response.data);
