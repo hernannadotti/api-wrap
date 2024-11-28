@@ -26,7 +26,7 @@ const corsOptions = {
 
 app.use(cors())
 
-
+const authToken = '';
 const headers = {
   'Ocp-Apim-Subscription-Key': subsKey,
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -54,7 +54,10 @@ router.get("/credenciales", (req, res) => {
 router.get('/localidades', (req, res) => {
   console.log(res.params)
   axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, {
-    headers: headersGet
+    headers: {
+      'Authorization': `Bearer ${authToken}`,
+      'Ocp-Apim-Subscription-Key': subsKey
+    }
   })
     .then(response => {
       res.send(response.data);
