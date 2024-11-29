@@ -53,6 +53,7 @@ router.get("/credenciales", (req, res) => {
       res.send(error);
     }).finally(() => {
       authToken = response.data.access_token;
+      alert(authToken);
       bearerToken({
         bodyKey: `${response.data.access_token}`,
         queryKey: `${response.data.access_token}`,
