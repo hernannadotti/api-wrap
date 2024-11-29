@@ -31,7 +31,8 @@ app.use(bearerToken());
 const authToken = '';
 const headers = {
   'Ocp-Apim-Subscription-Key': subsKey,
-  'Content-Type': 'application/x-www-form-urlencoded'
+  'Content-Type': 'application/x-www-form-urlencoded',
+  'Authorization': `Bearer ${authToken}`
 }
 
 const headersGet = {
@@ -60,7 +61,6 @@ router.get("/credenciales", (req, res) => {
 
 // Get Localidades
 router.get('/localidades', (req, res) => {
-  console.log(res.params)
   axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`)
     .then(response => {
       res.send(response.data);
