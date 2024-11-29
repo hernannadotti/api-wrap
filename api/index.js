@@ -36,7 +36,9 @@ const headers = {
 }
 
 const headersGet = {
-  'Ocp-Apim-Subscription-Key': subsKey
+  'Ocp-Apim-Subscription-Key': subsKey,
+  'Content-Type': 'application/x-www-form-urlencoded',
+  'Authorization': `Bearer ${authToken}`
 }
 
 // get Token
@@ -45,6 +47,12 @@ router.get("/credenciales", (req, res) => {
     headers: headers
   })
     .then(response => {
+      res.send(response.data);
+    })
+    .catch(error => {
+      res.send(error);
+    }).finally(() => {
+      authToken = response.data.access_token;
       bearerToken({
         bodyKey: `${response.data.access_token}`,
         queryKey: `${response.data.access_token}`,
@@ -52,16 +60,14 @@ router.get("/credenciales", (req, res) => {
         reqKey: 'token',
         cookie: false, // by default is disabled
       })
-      res.send(response.data);
-    })
-    .catch(error => {
-      res.send(error);
-    })
+    });
 });
 
 // Get Localidades
 router.get('/localidades', (req, res) => {
-  axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`)
+  axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, {
+    headers: headersGet
+  })
     .then(response => {
       res.send(response.data);
     })
