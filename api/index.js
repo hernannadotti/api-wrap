@@ -5,7 +5,7 @@ var baseUrl = "https://apidev.mercantilandina.com.ar";
 const subsKey = "d4f43f902b4049218451d78eb5966156";
 const axios = require("axios");
 const cors = require('cors');
-const bearerToken = require('express-bearer-token');
+var bodyParser = require('body-parser');
 
 app.listen(8000, () => {
   console.log('App running on PORT 3000')
@@ -17,7 +17,13 @@ const body = {
   'grant_type': 'password',
   'client_id': 'api-clientes-login',
 }
-  
+
+const bodyGet = {
+  'username': 'GASLUTST',
+  'password': 'gaslu2024',
+  'grant_type': 'password',
+  'client_id': 'api-clientes-login',
+}
 
 const corsOptions = {
   origin: '*',
@@ -26,19 +32,20 @@ const corsOptions = {
 }
 
 app.use(cors());
-app.use(bearerToken());
 
 const authToken = '';
 const headers = {
   'Ocp-Apim-Subscription-Key': subsKey,
-  'Content-Type': 'application/x-www-form-urlencoded',
-  'Authorization': `Bearer ${authToken}`
+  'Content-Type': 'application/x-www-form-urlencoded'
 }
 
 const headersGet = {
   'Ocp-Apim-Subscription-Key': subsKey,
   'Content-Type': 'application/x-www-form-urlencoded',
-  'Authorization': `Bearer ${authToken}`
+  'Accept': '*/*',
+  'Accept-Encoding': 'gzip, deflate, br',
+  'Connection': 'keep-alive',
+  'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
 }
 
 // get Token
@@ -51,22 +58,12 @@ router.get("/credenciales", (req, res) => {
     })
     .catch(error => {
       res.send(error);
-    }).finally(() => {
-      authToken = response.data.access_token;
-      alert(authToken);
-      bearerToken({
-        bodyKey: `${response.data.access_token}`,
-        queryKey: `${response.data.access_token}`,
-        headerKey: 'Bearer',
-        reqKey: 'token',
-        cookie: false, // by default is disabled
-      })
-    });
+    })
 });
 
 // Get Localidades
-router.get('/localidades', (req, res) => {
-  axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, {
+router.get('/localidades/:q', (req, res) => {
+  axios.post(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, body, {
     headers: headersGet
   })
     .then(response => {
@@ -77,6 +74,27 @@ router.get('/localidades', (req, res) => {
     })
 });
 
+axios.interceptors.request.use(
+  (config) => {
+      const token = localStorage.getItem('authToken');
+
+      if (token) {
+          config.headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      return config;
+  },
+
+  (error) => {
+      return Promise.reject(error);
+  }
+);
+
+// application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({extended: false}));
+
+// application/json
+app.use(bodyParser.json());
 app.use(router);
 
 module.exports = app;
