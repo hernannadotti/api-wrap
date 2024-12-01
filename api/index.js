@@ -6,6 +6,8 @@ const subsKey = "d4f43f902b4049218451d78eb5966156";
 const axios = require("axios");
 const cors = require('cors');
 var bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 app.listen(8000, () => {
   console.log('App running on PORT 3000')
@@ -18,12 +20,6 @@ const body = {
   'client_id': 'api-clientes-login',
 }
 
-const bodyGet = {
-  'username': 'GASLUTST',
-  'password': 'gaslu2024',
-  'grant_type': 'password',
-  'client_id': 'api-clientes-login',
-}
 
 const corsOptions = {
   origin: '*',
@@ -41,19 +37,17 @@ const headers = {
 
 const headersGet = {
   'Ocp-Apim-Subscription-Key': subsKey,
-  'Content-Type': 'application/x-www-form-urlencoded',
-  'Accept': '*/*',
-  'Accept-Encoding': 'gzip, deflate, br',
-  'Connection': 'keep-alive',
-  'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+  'Content-Type': 'application/x-www-form-urlencoded'
 }
 
 // get Token
-router.get("/credenciales", (req, res) => {
+router.get("/credenciales", (req, res, next) => {
   axios.post(`${baseUrl}/credenciales/v2`, body, {
     headers: headers
   })
     .then(response => {
+      // localStorage.setItem('token', response.data.access_token);
+      res.cookie('token', response.data.access_token);
       res.send(response.data);
     })
     .catch(error => {
@@ -61,10 +55,19 @@ router.get("/credenciales", (req, res) => {
     })
 });
 
+
+
 // Get Localidades
 router.get('/localidades/:q', (req, res) => {
-  axios.post(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, body, {
-    headers: headersGet
+  axios.get(`${baseUrl}/generales/v1/localidades?q=${req.params.q}`, {
+    headers: {
+      'Ocp-Apim-Subscription-Key': subsKey,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': `Bearer ${req.cookies.token}`,
+      'Accept': 'application/json',
+      'Allow-Control-Allow-Origin': '*'
+
+    }
   })
     .then(response => {
       res.send(response.data);
@@ -74,21 +77,6 @@ router.get('/localidades/:q', (req, res) => {
     })
 });
 
-axios.interceptors.request.use(
-  (config) => {
-      const token = localStorage.getItem('authToken');
-
-      if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`;
-      }
-
-      return config;
-  },
-
-  (error) => {
-      return Promise.reject(error);
-  }
-);
 
 // application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
