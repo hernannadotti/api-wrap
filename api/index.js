@@ -11,9 +11,9 @@ app.use(cookieParser());
 const bearerToken = require('express-bearer-token');
 app.use(bearerToken());
 
-// app.use(function (req, res) {
-//   res.send('Token '+req?.token);
-// });
+app.use(function (req, res) {
+  res.send('Token '+req?.access_token);
+});
 
 app.use(bearerToken({
   bodyKey: 'access_token',
@@ -56,7 +56,7 @@ router.get("/credenciales", (req, res) => {
   axios.post(`${baseUrl}/credenciales/v2`, body, {
     headers: headers
   }).then(response => {
-    res.cookie('access_token', response.data.access_token , {maxAge: 9000000000, httpOnly: true, secure: true });
+    res.cookie('access_token', response.data.access_token , {maxAge: 9000000000, httpOnly: true });
     res.send(response.data);
   }).catch(error => {
     res.send(error);
