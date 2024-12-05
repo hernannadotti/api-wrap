@@ -29,6 +29,8 @@ app.use(bearerToken({
   }
 }));
 
+
+
 axios.interceptors.request.use(function (config) {
     // fixHeaders = getFixHeaders();
     // Do something before request is sent
@@ -38,66 +40,21 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(error);
   });
 
-  axios.interceptors.response.use(function (response) {
-    setFixHeaders(response.data.access_token);
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
-    return response;
-  }, function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    return Promise.reject(error);
-  });
 
 
 app.listen(8000, () => {
   console.log('App running on PORT 3000');
 });
 
-let authToken = '';
-
-const body = {
-  'username': 'GASLUTST',
-  'password': 'gaslu2024',
-  'grant_type': 'password',
-  'client_id': 'api-clientes-login',
-}
 
 
 app.use(cors({ credentials: true, origin: true }));
 axios.defaults.withCredentials = true
 
 
-const headers = {
-  'Ocp-Apim-Subscription-Key': subsKey,
-  'Content-Type': 'application/x-www-form-urlencoded',
-  'Allow-Origin': '*',
-  'Access-Control-Allow-Origin': '*',
-}
-
-const fixHeaders = {}
-
-function setFixHeaders (token) {
-  fixHeaders['Authorization'] = `Bearer ${token}`;
-  fixHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
-  fixHeaders['Allow-Origin'] = '*';
-  fixHeaders['Access-Control-Allow-Origin'] = '*';
-}
-
-function getFixHeaders () {
-  return fixHeaders;
-}
 
 
 router.get("/credenciales", (req, res) => {
-  // axios.post(`${baseUrl}/credenciales/v2`, body, {
-  //   headers: headers
-  // }).then(response => {
-  //   res.cookie('access_token', response.data.access_token , {maxAge: 9000000000, httpOnly: true });
-  //   res.send(response.data);
-  // }).catch(error => {
-  //   res.send(error);
-  // })
   function getTokenFromServer() {
     return axios.request({
         method: "post",
@@ -153,6 +110,160 @@ router.get('/localidades/:q',(req, res) => {
     .catch(error => {
       res.send(error);
     })
+});
+
+// Get Marcas
+router.get('/marcas',(req, res) => {
+  axios.get(`${baseUrl}/vehiculos/v1/marcas`, { 
+    headers: 
+    {
+      'Ocp-Apim-Subscription-Key': subsKey,
+      'Authorization': `${req.headers.authorization}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*',
+    },
+    withCredentials: true
+  })
+    .then(response => {
+      res.send(response.data);
+    })
+    .catch(error => {
+      res.send(error);
+    })
+});
+
+// Get Models By Brand
+router.get('/marcas/:brand/:year',(req, res) => {
+  axios.get(`${baseUrl}/vehiculos/v1/marcas/${req.params.brand}/${req.params.year}`, { 
+    headers: 
+    {
+      'Ocp-Apim-Subscription-Key': subsKey,
+      'Authorization': `${req.headers.authorization}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*',
+    },
+    withCredentials: true
+  })
+    .then(response => {
+      res.send(response.data);
+    })
+    .catch(error => {
+      res.send(error);
+    })
+});
+
+// Get Vehicles By Model
+router.get('/marcas/:brand/:year/:model',(req, res) => {
+  axios.get(`${baseUrl}/vehiculos/v1/marcas/${req.params.brand}/${req.params.year}/${req.params.model}`, { 
+    headers: 
+    {
+      'Ocp-Apim-Subscription-Key': subsKey,
+      'Authorization': `${req.headers.authorization}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*',
+    },
+    withCredentials: true
+  })
+    .then(response => {
+      res.send(response.data);
+    })
+    .catch(error => {
+      res.send(error);
+    })
+});
+
+// Get Vehicles By InfoAuto
+router.get('/vehiculos/:infoAuto',(req, res) => {
+  axios.get(`${baseUrl}/vehiculos/v1/infoauto/${req.params.infoAuto}`, { 
+    headers: 
+    {
+      'Ocp-Apim-Subscription-Key': subsKey,
+      'Authorization': `${req.headers.authorization}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*',
+    },
+    withCredentials: true
+  })
+    .then(response => {
+      res.send(response.data);
+    })
+    .catch(error => {
+      res.send(error);
+    })
+});
+
+// Get Values by Vehicle Id
+router.get('/valores/:idVehicle',(req, res) => {
+  axios.get(`${baseUrl}/vehiculos/v1/${req.params.idVehicle}/valores`, { 
+    headers: 
+    {
+      'Ocp-Apim-Subscription-Key': subsKey,
+      'Authorization': `${req.headers.authorization}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Allow-Origin': '*',
+      'Access-Control-Allow-Origin': '*',
+    },
+    withCredentials: true
+  })
+    .then(response => {
+      res.send(response.data);
+    })
+    .catch(error => {
+      res.send(error);
+    })
+});
+
+// Get Quote Car
+router.post('/cotizacion',(req, res) => {
+  function getCotizacion() {
+    return axios.request({
+      method: 'post',
+      baseURL: `${baseUrl}/cotizaciones/v2/auto`,
+      headers:
+      {
+        'Ocp-Apim-Subscription-Key': subsKey,
+        'Authorization': `${req.headers.authorization}`,
+        'Content-Type': 'application/json',
+        'Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*',
+      },
+      data: req.body,
+      withCredentials: true
+    })
+      .then(response => {
+        res.send(response.data);
+        return response.data;
+      })
+      .catch(error => {
+        res.send(error);
+      })
+  }
+  
+  getCotizacion().then(data => {
+    return data;
+  });
+  // axios.post(`${baseUrl}/cotizaciones/v2/auto`, { 
+  //   body: req.body,
+  //   headers: 
+  //   {
+  //     'Ocp-Apim-Subscription-Key': subsKey,
+  //     'Authorization': `${req.headers.authorization}`,
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //     'Allow-Origin': '*',
+  //     'Access-Control-Allow-Origin': '*',
+  //   },
+  //   withCredentials: true
+  // })
+  //   .then(response => {
+  //     res.send(response.data);
+  //   })
+  //   .catch(error => {
+  //     res.send(error);
+  //   })
 });
 
 
