@@ -43,8 +43,8 @@ router.get("/credenciales", (req, res) => {
         method: "post",
         baseURL: `${baseUrl}/credenciales/v2`,
         data: {
-          'username': '',
-          'password': '',
+          'username': process.env.username,
+          'password': process.env.password,
           'grant_type': 'password',
           'client_id': 'api-clientes-login',
         },
