@@ -13,23 +13,6 @@ app.use(bearerToken());
 
 
 
-app.use(bearerToken({
-  bodyKey: 'access_token',
-  queryKey: 'access_token',
-  headerKey: 'Bearer',
-  reqKey: 'token',
-  cookie: true, // by default is disabled
-}));
-
-app.use(bearerToken({
-  cookie: {
-    signed: true, // if passed true you must pass secret otherwise will throw error
-    secret: 'YOUR_APP_SECRET',
-    key: 'access_token' // default value
-  }
-}));
-
-
 
 axios.interceptors.request.use(function (config) {
     // fixHeaders = getFixHeaders();
@@ -60,8 +43,8 @@ router.get("/credenciales", (req, res) => {
         method: "post",
         baseURL: `${baseUrl}/credenciales/v2`,
         data: {
-          'username': 'GASLUTST',
-          'password': 'gaslu2024',
+          'username': '',
+          'password': '',
           'grant_type': 'password',
           'client_id': 'api-clientes-login',
         },
@@ -79,9 +62,6 @@ router.get("/credenciales", (req, res) => {
       }).catch((er) => {
         console.log(er);
       });
-      console.log(tok);
-      //console.log(reqtoken);
-      // res.render('links/bbvat',{reqbbva: reqbbva});
     }
 
     getTokenFromServer().then(data => {
@@ -246,24 +226,7 @@ router.post('/cotizacion',(req, res) => {
   getCotizacion().then(data => {
     return data;
   });
-  // axios.post(`${baseUrl}/cotizaciones/v2/auto`, { 
-  //   body: req.body,
-  //   headers: 
-  //   {
-  //     'Ocp-Apim-Subscription-Key': subsKey,
-  //     'Authorization': `${req.headers.authorization}`,
-  //     'Content-Type': 'application/x-www-form-urlencoded',
-  //     'Allow-Origin': '*',
-  //     'Access-Control-Allow-Origin': '*',
-  //   },
-  //   withCredentials: true
-  // })
-  //   .then(response => {
-  //     res.send(response.data);
-  //   })
-  //   .catch(error => {
-  //     res.send(error);
-  //   })
+
 });
 
 
